@@ -1,13 +1,13 @@
 ActsLikeGit
 ===========
 
-Introduction goes here.
+Revision ActiveRecord fields in a git repository, with acts_as_versioned style rollback etc.
 
 
 Example
 =======
 
-Example goes here.
+Soon, sooooon!
 
 
-Copyright (c) 2008 [name of plugin creator], released under the MIT license
+Copyright (c) 2008 [Jamie van Dyke], released under the MIT license
