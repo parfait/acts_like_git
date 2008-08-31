@@ -56,23 +56,6 @@ module ActsLikeGit
           
           alias_method_chain :destroy, :after_commit_callback
           
-          # Store a class variable to our git library (grit) rather than 
-          # per instance
-          #
-          def git
-            init_git_directory
-            @@git ||= Grit::Repo.new(self.git_settings.repository)
-          end
-          
-          private
-          
-          def init_git_directory
-            FileUtils.mkdir_p(self.git_settings.repository) unless File.exists?(self.git_settings.repository)
-            unless File.exists?(File.join(self.git_settings.repository, '.git'))
-              system_call("cd #{self.git_settings.repository} && git init")
-            end
-          end
-          
           def system_call(command)
             system("#{command} > /dev/null")
           end

@@ -3,7 +3,7 @@ require 'acts_like_git/active_record/git'
 require 'acts_like_git/active_record/version_methods'
 
 module ActsLikeGit
-  # Core additions to ActiveRecord models - Explore git_details for linking models
+  # Core additions to ActiveRecord models - Explore versioning for linking models
   # to a git repository.
   #
   module ActiveRecord
@@ -26,7 +26,7 @@ module ActsLikeGit
           def versioning(&block)
             return unless ActsLikeGit.versioning_enabled?
             
-            self.git_settings ||= GitSettings.new(self, &block)
+            self.git_settings ||= ModelInit.new(self, &block)
             
             unless ActsLikeGit.all_versioned_models.include?(self.name)
               ActsLikeGit.all_versioned_models << self.name

@@ -5,18 +5,20 @@ module ActsLikeGit
     module VersionMethods
       
       def showing_latest_revision?
-        
+        self.version.blank? ? true : false
       end
       
       # Return the count of commits in git
       def versions
-        self.git.commits.length
+        self.git.commits
       end
       
-      # Save the current version to git, then change current fields to match the git version
-      # Then save the file
-      def rollback
-
+      # Revert the database version to the git commit version
+      def revert_to(version_hash)
+        # Revert the git repository to 
+        # For each field on this model that is versioned
+        
+        
       end
       
     end
