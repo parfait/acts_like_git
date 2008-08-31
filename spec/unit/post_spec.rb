@@ -5,7 +5,7 @@ context "A Post that versions a title field" do
   before(:each) do
     # Grit.debug = true
     @post = Post.create(:title => "Moo", :body => "RAR")
-    @repo_dir = File.join('/', '.data', 'git_store')
+    @repo_dir = File.join('/', '.data', 'git_store', 'posts')
   end
   
   describe "in general" do
@@ -26,7 +26,7 @@ context "A Post that versions a title field" do
     end
     
     it "should have a count of zero when no updates have occurred" do
-      @post.versions.should == 0
+      @post.versions.size.should == 0
     end
   end
 
@@ -47,7 +47,7 @@ context "A Post that versions a title field" do
     
     it "should create a folder structure, and file (containing field contents) for each field for the model instance" do
       stub_all(:except => :create_git_folder_structure)
-      FileUtils.expects(:mkdir_p).with(File.join(@repo_dir, 'posts', @post.id.to_s))
+      FileUtils.expects(:mkdir_p).with(File.join(@repo_dir, @post.id.to_s))
       @post.title = "New Title"
       @post.save
     end
@@ -57,7 +57,7 @@ context "A Post that versions a title field" do
       file_mock.expects(:puts).with("Moo")
       file_mock.expects(:close)
       stub_all(:except => :write_field_contents_to_file)
-      File.expects(:open).with(File.join(@repo_dir, 'posts', @post.id.to_s, 'title.txt'), 'w').returns(file_mock)
+      File.expects(:open).with(File.join(@repo_dir, @post.id.to_s, 'title.txt'), 'w').returns(file_mock)
       @post.title.should == "Moo"
       @post.title = "This is my new title"
       @post.save
@@ -85,25 +85,20 @@ context "A Post that versions a title field" do
     it "should increment version counts when updates occur" do
       @post.title = "New title to increment the commit count"
       @post.save
-      @post.versions.should == 1
+      @post.versions.size.should == 1
       @post.title = "Another new title to increment the commit count"
       @post.save
-      @post.versions.should == 2
+      @post.versions.size.should == 2
     end
     
-    it "should change the current database version to the previous one when rolled back" do
-      @post.title = "Version 2"
+    it "should set the database row to a git version when reverted" do
+      @post.title = "New title for reverting"
       @post.save
-      @post.title = "Version 3"
+      @post.title = "Newer title for reverting"
       @post.save
-      @post.rollback
-      @post.title.should == "Version 2"
-    end
-    
-    it "should know if the database version is the latest" do
-      @post.showing_latest_revision?.should == true
-      @post.rollback
-      @post.showing_latest_revision?.should == false
+      hash = @post.git.commits.first.id
+      @post.revert_to(hash)
+      @post.title.should == "Moo"
     end
     
     def stub_all(exception = {})

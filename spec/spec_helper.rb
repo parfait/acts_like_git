@@ -33,7 +33,7 @@ ActiveRecord::Base.silence do
       m.create_table 'posts' do |t|
         t.string  :title
         t.text    :body
-        t.version :string
+        t.string  :version
         t.timestamps
       end
     end
