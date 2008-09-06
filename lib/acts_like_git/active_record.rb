@@ -32,7 +32,7 @@ module ActsLikeGit
               ActsLikeGit.all_versioned_models << self.name
             end
             
-            before_save   :git_commit
+            after_save    :git_commit
             after_destroy :git_delete
           end
         end

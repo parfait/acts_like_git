@@ -58,8 +58,7 @@ module ActsLikeGit
           
           def git
             init_git_directory
-            puts `ls /tmp/.data`
-            @git ||= Grit::Repo.new(self.git_settings.repository, :is_bare => true)
+            @git ||= Grit::Repo.new(self.git_settings.repository)
           end
           
           private
