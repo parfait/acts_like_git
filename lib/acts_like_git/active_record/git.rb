@@ -16,7 +16,7 @@ module ActsLikeGit
         # We don't version if we only have 1 revision
         # And we don't version if the :version field has a hash in it
         return if self.id.nil? or self.version.nil?
-        create_git_folder_structure
+        init_structure
         add_all_changes_to_git
       end
       
@@ -31,40 +31,36 @@ module ActsLikeGit
       end
       
     private
-      def create_git_folder_structure
-        model_folder = self.class.to_s.tableize
-        model_id = self.id.to_s
-        FileUtils.mkdir_p(File.join(self.git_settings.repository, model_folder, model_id))
-      end
-      
-      def write_field_contents_to_file(field, contents)
-        file = File.open(field_path(field), 'w')
-        file.puts contents
-        file.close
+      def init_structure
+        @model_folder = self.class.to_s.tableize
+        @model_id = self.id.to_s
+        @user = Struct.new(:name => "ActsAsGit", :user => 'aag@email.com')
       end
       
       def add_all_changes_to_git
+        last_commit = self.git.commits.first rescue nil
+        last_tree = last_commit.tree.id rescue nil
+        
+        i = self.git.index
+        i.read_tree(last_tree)
+        
         changed_versioned_fields.each do |field|
           old_contents = changes[field.to_s][0]
-          write_field_contents_to_file(field, old_contents)
-          add_file_to_git(field_path(field, :for_git))
+          i.add(field_path(field), old_contents)
         end
-        commit_all
+        pp i
+        commit_all(i, last_commit)
       end
       
-      def add_file_to_git(file)
-        self.git.add(file)
+      # returns new commit sha
+      def commit_all(index, last_commit, last_tree)
+        message = "new version of #{self.class}, id: #{self.id.to_s}"
+        lc = (last_commit ? [last_commit.id] : nil)
+        index.commit(message, lc, @user, last_tree)
       end
       
-      def commit_all
-        self.git.commit_all("new version of #{self.class}, id: #{self.id.to_s}")
-      end
-      
-      def field_path(field, git_version=nil)
-        model_folder = self.class.to_s.tableize
-        model_id = self.id.to_s
-        git_version ? File.join(model_folder, model_id, "#{field}.txt") : 
-                      File.join(self.git_settings.repository, model_folder, model_id, "#{field}.txt")
+      def field_path(field)
+        File.join(@model_folder, @model_id, "#{field}.txt")
       end
     end
   end

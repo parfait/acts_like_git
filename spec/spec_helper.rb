@@ -1,6 +1,6 @@
 ENV["RAILS_ENV"] = "test"
 $:.unshift File.dirname(__FILE__) + '/../lib'
- 
+
 begin
   require 'rubygems'
   require 'spec'
@@ -33,7 +33,7 @@ ActiveRecord::Base.silence do
       m.create_table 'posts' do |t|
         t.string  :title
         t.text    :body
-        t.version :string
+        t.string  :version
         t.timestamps
       end
     end
