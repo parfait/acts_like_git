@@ -32,6 +32,14 @@ module ActsLikeGit
               ActsLikeGit.all_versioned_models << self.name
             end
             
+            self.git_settings.versioned_fields.each do |column|
+              git_read_method = "def #{column}; read_git_method('#{column}'); end"          
+              evaluate_attribute_method column, git_read_method
+              
+              git_write_method = "def #{column}=(val); write_git_method('#{column}', val); end"          
+              evaluate_attribute_method column, git_write_method
+            end
+            
             after_save    :git_commit
             after_destroy :git_delete
           end

@@ -26,6 +26,12 @@ context "A Post that versions a title field" do
       @post.git_settings.repository.should == @repo_dir
     end
     
+    it "should read from git" do
+      @post.title.should == 'Moo'
+      @post.title = 'Moo2'
+      @post.title.should == 'Moo2'
+    end
+    
   end
 
   describe "on create" do
@@ -36,12 +42,7 @@ context "A Post that versions a title field" do
   end
 
   describe "on update" do
-    
-    it "should calculate the fields that have changed" do
-      @post.title = "Another Moo"
-      @post.changed_versioned_fields.should == [:title]      
-    end
-    
+        
     it "should write a git tree with the field changes with the /model/id/field.txt format" do
       t = "This is another new title"
       @post.title = t

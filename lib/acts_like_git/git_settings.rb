@@ -8,7 +8,7 @@ module ActsLikeGit
   # Enjoy.
   # 
   class GitSettings
-    attr_accessor :versioned_fields, :repository
+    attr_accessor :versioned_fields, :versioned_fields_values, :repository
     
     # TODO: document me
     #
@@ -30,6 +30,7 @@ module ActsLikeGit
       
       builder.instance_eval( &block )
       
+      @versioned_fields_values = {}
       @versioned_fields = builder.versioned_fields
       @repository       = builder.repository
     end

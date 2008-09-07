@@ -6,6 +6,7 @@ module ActsLikeGit
       
       # List all the fields that have changed that we version
       def changed_versioned_fields
+        @version
         return [] unless changed?
         self.git_settings.versioned_fields & self.changes.keys.collect {|f| f.intern }
       end
@@ -16,10 +17,31 @@ module ActsLikeGit
         add_all_changes_to_git
       end
       
+      def write_git_method(column, value)
+        self.git_settings.versioned_fields_values[column] = value
+      end
+      
+      def read_git_method(column)
+        if v = self.git_settings.versioned_fields_values[column]
+          return v
+        end
+        
+        last_commit = self.git.log.first
+        (last_commit.tree/model_folder/model_id/"#{column}.txt").data
+      rescue Object => e
+        ''
+      end
+      
+      def model_folder
+        self.class.to_s.tableize
+      end
+      
+      def model_id
+        self.id.to_s
+      end
+      
       # Return a list of commits strings for this model
       def log
-        model_folder = self.class.to_s.tableize
-        model_id = self.id.to_s
         commits = self.git.log('master', "#{model_folder}/#{model_id}")
         dir = File.join(model_folder, model_id)
         commits.collect {|c| c.id }
@@ -39,11 +61,10 @@ module ActsLikeGit
         i = self.git.index
         i.read_tree(last_tree) if last_tree
         
-        changed_versioned_fields.each do |field|
-          new_contents = changes[field.to_s][1]
-          i.add(field_path(field), new_contents)
+        self.git_settings.versioned_fields_values.each do |field, value|
+          i.add(field_path(field), value)
         end
-        
+                
         commit_all(i, last_commit, last_tree)
       end
       
