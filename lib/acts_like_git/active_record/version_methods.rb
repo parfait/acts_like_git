@@ -16,13 +16,13 @@ module ActsLikeGit
       # Revert the database version to the git commit version
       def revert_to(version_hash)
         tree = self.git.tree(version_hash)
-        dir = tree.contents[0]
-        data = dir.contents[0]
-        data.contents.each do |f|
+        dir = tree.contents[0] # posts/
+        data = dir.contents[0] # 6/
+        data.contents.each do |f| # title.txt
           field = f.name.gsub(".txt","")
           send("#{field.to_sym}=", f.data)
         end
-        save
+        save # hm, not sure if I want to do this
       end
     end
   end
