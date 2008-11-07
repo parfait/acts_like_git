@@ -1,6 +1,40 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 require 'pp'
 
+context "A Post that versions a title and description field" do
+
+  before(:each) do
+    #Grit.debug = true
+    @hat = Hat.create!(:title => "Moo", :body => "RAR")
+    @repo_dir = File.join('/', 'tmp', '.data', 'git_store.git')
+  end
+  
+  it "has the list of versioned fields, on the class" do
+    Hat.git_settings.versioned_fields.should == [:title, :body]
+  end
+  
+  describe "on update" do
+    it "should write a git tree with the field changes with the /model/id/field.txt format" do
+      @hat.title = "hi"
+      @hat.body = "there"
+      @hat.save!
+      dta = (@hat.git.log.first.tree/"hats"/@hat.id.to_s/"title.txt").data
+      dta.should == "hi"
+      dta = (@hat.git.log.first.tree/"hats"/@hat.id.to_s/"body.txt").data
+      dta.should == "there"
+    end
+    
+    it "saves one commit" do
+      @hat.title = "yeah!!"
+      @hat.body = "wheeeeeeeee!"
+      lambda {
+        @hat.save!
+      }.should change { @hat.git.commits.size }.by(1)
+    end
+  end
+
+end
+
 context "A Post that versions a title field" do
 
   before(:each) do
@@ -40,6 +74,16 @@ context "A Post that versions a title field" do
       @post.save
       @post.revert_to @post.git.commits[0].id
       @post.title.should == "Moo"
+      @post.save!
+      @post.reload.title.should == "Moo"
+    end
+    
+    it "reverting to a previous commit-ish creates a new commit" do
+      @post.title = "elephant"
+      @post.save
+      lambda {
+        @post.revert_to @post.git.commits[0].id
+      }.should change { @post.git.commits.size }.by(1)
     end
   end
 

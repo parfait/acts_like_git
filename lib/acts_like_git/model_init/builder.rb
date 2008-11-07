@@ -38,8 +38,10 @@ module ActsLikeGit
         #
         # field :body
         #
-        def field(column)
-          @versioned_fields << column
+        def field(*columns)
+          columns.each { |column|
+            @versioned_fields << column
+          }
         end
                 
         # acts_like_git needs a repository to save the versions 
