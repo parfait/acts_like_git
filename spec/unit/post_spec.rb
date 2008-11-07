@@ -5,7 +5,7 @@ context "A Post that versions a title field" do
 
   before(:each) do
     #Grit.debug = true
-    @post = Post.create(:title => "Moo", :body => "RAR")
+    @post = Post.create!(:title => "Moo", :body => "RAR")
     @repo_dir = File.join('/', 'tmp', '.data', 'git_store.git')
   end
   
@@ -53,6 +53,7 @@ context "A Post that versions a title field" do
     
     it "should calculate the fields that have changed" do
       @post.title = "Another Moo"
+      @post.title_changed?.should be_true
       @post.changed_versioned_fields.should == [:title]      
     end
     
@@ -64,13 +65,14 @@ context "A Post that versions a title field" do
     end
     
     it "should increment version counts when updates occur" do
-      @post.versions.should == 1
+      @post.versions.size.should == 1
       @post.title = "New title to increment the commit count"
       @post.save
-      @post.versions.should == 2
+      puts @post.versions[0]
+      @post.versions.size.should == 2
       @post.title = "Another new title to increment the commit count"
       @post.save
-      @post.versions.should == 3
+      @post.versions.size.should == 3
     end    
   end
     
