@@ -3,6 +3,8 @@ ActsLikeGit
 
 Revision ActiveRecord fields in a git repository, with acts_as_versioned style rollback etc.
 
+Acts Like Git stores all version of fields in the database, when you save.  The only exception to this is when there are no version, git isn't used at all.
+
 
 Example
 =======

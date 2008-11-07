@@ -25,7 +25,7 @@ context "A Post that versions a title field" do
     it "should have the git repository to save to, on an instance" do
       @post.git_settings.repository.should == @repo_dir
     end
-    
+
     it "should read from git" do
       @post.title.should == 'Moo'
       @post.title = 'Moo2'
@@ -51,6 +51,11 @@ context "A Post that versions a title field" do
       dta.should == t
     end
     
+    it "should calculate the fields that have changed" do
+      @post.title = "Another Moo"
+      @post.changed_versioned_fields.should == [:title]      
+    end
+    
     it "should list all available version strings for a file as a log" do
       @post.log.should be_kind_of(Array)
       @post.title = "New title to increment the commit count"
@@ -66,19 +71,7 @@ context "A Post that versions a title field" do
       @post.title = "Another new title to increment the commit count"
       @post.save
       @post.versions.should == 3
-    end
-
-=begin    
-    it "should change the current database version to the previous one when rolled back" do
-      @post.title = "Version 2"
-      @post.save
-      @post.title = "Version 3"
-      @post.save
-      @post.rollback
-      @post.title.should == "Version 2"
-    end
-=end  
-    
+    end    
   end
     
   after(:each) do

@@ -4,7 +4,7 @@ module ActsLikeGit
     # 
     module Git
       
-      # List all the fields that have changed that we version
+      # List all the fields that are dirty that we version
       def changed_versioned_fields
         @version
         return [] unless changed?
