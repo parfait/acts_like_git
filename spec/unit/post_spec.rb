@@ -33,6 +33,15 @@ context "A Post that versions a title field" do
     end
     
   end
+  
+  describe "reverting" do
+    it "should roll back all fields to a previous commit" do
+      @post.title = "monkey"
+      @post.save
+      @post.revert_to @post.git.commits[0].id
+      @post.title.should == "Moo"
+    end
+  end
 
   describe "on create" do
     it "should not create a git version of itself" do
@@ -68,7 +77,6 @@ context "A Post that versions a title field" do
       @post.versions.size.should == 1
       @post.title = "New title to increment the commit count"
       @post.save
-      puts @post.versions[0]
       @post.versions.size.should == 2
       @post.title = "Another new title to increment the commit count"
       @post.save
