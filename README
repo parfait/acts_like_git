@@ -1,15 +1,34 @@
 ActsLikeGit
 ===========
 
-Revision ActiveRecord fields in a git repository, with acts_as_versioned style rollback etc.
+ALG automagically saves the history of a given text or string field.  It sits over the top of
+an ActiveRecord model; after a value is committed to the database, the plugin writes the
+new value to a text file and commits it to a git repository.  This way you get all the advantages
+of using Git as version-control.
 
-Acts Like Git stores all version of fields in the database, when you save.  The only exception to this is when there are no version, git isn't used at all.
+Usage:
+
+class Post < ActiveRecord::Base
+  versioning do
+    field :title
+    set_repository '/home/git/repositories/postal.git'
+  end
+end
+
+To view the complete list of changes:
+
+  >> @post = Post.find 15
+  <Post:15>
+  >> @post.title
+  => 'Freddy'
+  >> @post.history(:title)
+  => ['Joe', 'Frank', 'Freddy]
+  >> @post.log
+  => ['bfec2f69e270d2d02de4e8c7a4eb2bd0f132bdbb', '643deb45c12982dde75ba71657792a2dbdda83e6', '1ce6c7368219db7698f4acc3417e656510b4138d']
+  >> @post.revert_to '1ce6c7368219db7698f4acc3417e656510b4138d'
+  >> @post.title
+  => 'Joe'
 
 
-Example
-=======
 
-Soon, sooooon!
-
-
-Copyright (c) 2008 [Jamie van Dyke], released under the MIT license
+Copyright (c) 2008 [Jamie van Dyke, Courtenay Gasking, Scott Chacon], released under the MIT license

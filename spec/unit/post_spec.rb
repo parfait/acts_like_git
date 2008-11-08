@@ -86,6 +86,20 @@ context "A Post that versions a title field" do
       }.should change { @post.git.commits.size }.by(1)
     end
   end
+  
+  describe "history" do
+    it "shows the complte history of a field" do
+      %w(monkey elephant lemur giraffe).each do |val|
+        @post.update_attribute :title, val
+      end
+      @post.history(:title).should == %w(Moo monkey elephant lemur giraffe).reverse
+    end
+  end
+  
+  describe "commit message" do
+    it "allows custom commit messages in a proc" do
+    end
+  end
 
   describe "on create" do
     it "should not create a git version of itself" do

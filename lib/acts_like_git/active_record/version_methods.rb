@@ -24,6 +24,13 @@ module ActsLikeGit
         end
         save # hm, not sure if I want to do this
       end
+
+      # Find the complete (textual) history for a field
+      def history(field)
+        commits = self.git.log('master', "#{model_folder}/#{model_id}/#{field}.txt")
+        commits.collect {|c| (c.tree/model_folder/model_id/"#{field}.txt").data }
+      end      
+
     end
   end
 end

@@ -44,7 +44,6 @@ module ActsLikeGit
       # Return a list of commits strings for this model
       def log
         commits = self.git.log('master', "#{model_folder}/#{model_id}")
-        dir = File.join(model_folder, model_id)
         commits.collect {|c| c.id }
       end
       
