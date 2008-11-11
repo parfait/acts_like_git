@@ -94,10 +94,31 @@ context "A Post that versions a title field" do
       end
       @post.history(:title).should == %w(Moo monkey elephant lemur giraffe).reverse
     end
+    
+    it "shows the complte history of a field" do
+      %w(monkey elephant lemur giraffe).each do |val|
+        @post.update_attribute :title, val
+      end
+      @post.history_hash(:title).map { |h| h[:data] }.should == %w(Moo monkey elephant lemur giraffe).reverse
+      @post.history_hash(:title).map { |h| h[:id] }.should == @post.log
+    end
   end
   
   describe "commit message" do
+    before do
+      @monkey = Monkey.create! :title => "Chimpy"
+    end
+    
+    it "sets up commit message" do
+      @monkey.git_settings.commit_message.class.should == Proc # "Committed by Joseph"
+    end
+
     it "allows custom commit messages in a proc" do
+      @monkey.update_attribute :title, "Sir Chimpington"
+      @monkey.git.commits.last.message.should == "Committed by Joseph"
+    end
+    
+    it "allows custom commit authors in a proc" do
     end
   end
 

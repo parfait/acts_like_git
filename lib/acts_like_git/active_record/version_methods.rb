@@ -29,7 +29,19 @@ module ActsLikeGit
       def history(field)
         commits = self.git.log('master', "#{model_folder}/#{model_id}/#{field}.txt")
         commits.collect {|c| (c.tree/model_folder/model_id/"#{field}.txt").data }
-      end      
+      end
+      
+      # Convenience method to give you an array of hashes
+      # { :id => 'aee1be..', :data => 'monkey' }
+      def history_hash(field)
+        commits = self.git.log('master', "#{model_folder}/#{model_id}/#{field}.txt")
+        commits.inject([]) { |memo,iter|
+          # You can get all sorts of information, like 'blame'
+          commit = (iter.tree/model_folder/model_id/"#{field}.txt")
+          memo << { :id => iter.id, :data => commit.data } #, :date => commit.committed_date }??
+          memo
+        }
+      end
 
     end
   end

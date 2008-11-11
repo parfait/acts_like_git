@@ -70,7 +70,16 @@ module ActsLikeGit
       
       # returns new commit sha
       def commit_all(index, last_commit, last_tree)
-        message = "new version of #{self.class}, id: #{self.id.to_s}"
+        callback = self.git_settings.commit_message
+        # $stderr.puts self.git_settings.inspect
+        message = case callback
+        when Symbol
+          self.send(callback)
+        when Proc
+          instance_eval &callback
+        else
+          "new version of #{self.class}, id: #{self.id.to_s}" 
+        end
         lc = (last_commit ? [last_commit.id] : nil)
         index.commit(message, lc, @user)
       end
