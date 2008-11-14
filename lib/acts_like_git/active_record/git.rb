@@ -58,7 +58,13 @@ module ActsLikeGit
         last_commit = self.git.log.first rescue nil
         last_tree = last_commit.tree.id rescue nil
         
-        i = self.git.index
+        begin
+          i = self.git.index
+        #rescue Grit::InvalidGitRepositoryError
+        #  raise "Can't find the repository at #{@repository}"
+        
+        end
+        
         i.read_tree(last_tree) if last_tree
         
         self.git_settings.versioned_fields_values.each do |field, value|

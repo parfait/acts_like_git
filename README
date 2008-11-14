@@ -8,11 +8,12 @@ of using Git as version-control.
 
 Usage:
 
-class Post < ActiveRecord::Base
-  versioning(:title) do |version|
-    version.set_repository '/home/git/repositories/postal.git'
-  end
-end
+    class Post < ActiveRecord::Base
+      versioning(:title) do |version|
+        version.repository = '/home/git/repositories/postal.git'
+        version.message = lambda { |post| "Committed by #{post.author.name}" }
+      end
+    end
 
 To view the complete list of changes:
 

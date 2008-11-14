@@ -48,7 +48,6 @@ module ActsLikeGit
         # 
         def repository=(file_path)
           # TODO - More file checks
-          # TODO - mkdir -p
           @repository = file_path
         end
         alias_method :set_location, :repository=

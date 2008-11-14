@@ -17,10 +17,8 @@ module ActsLikeGit
           #
           # An example:
           #
-          #   versioning do
-          #     repository "/path/to/my/repository"
-          #     field "title"
-          #     field "body"
+          #   versioning(:title, :body) do |v|
+          #     v.repository = "/path/to/my/repository"
           #   end
           #
           def versioning(*fields, &block)

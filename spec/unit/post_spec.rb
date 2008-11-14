@@ -35,6 +35,21 @@ context "A Post that versions a title and description field" do
 
 end
 
+# context "A post with no config options" do
+#   before(:each) do
+#     @giraffe = Giraffe.create!(:title => "Moo", :body => "RAR")
+#   end
+#   
+#   describe "on update" do
+#     it "should write a git tree with the field changes with the /model/id/field.txt format" do
+#       @hat.title = "hi"
+#       @hat.save!
+#       dta = (@hat.git.log.first.tree/"hats"/@hat.id.to_s/"title.txt").data
+#       dta.should == "hi"
+#     end
+#   end
+# end
+
 context "A Post that versions a title field" do
 
   before(:each) do

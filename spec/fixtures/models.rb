@@ -1,3 +1,5 @@
+RAILS_ROOT = File.dirname(__FILE__)
+
 class Post < ActiveRecord::Base
   versioning(:title) { |version|
     version.repository = '/tmp/.data/git_store.git'
@@ -11,6 +13,10 @@ class Hat < ActiveRecord::Base
   end
 end
 
+class Giraffe < ActiveRecord::Base
+  set_table_name 'posts'
+  versioning(:title) {}
+end
 
 class Monkey < ActiveRecord::Base
   set_table_name 'posts' # lazy
