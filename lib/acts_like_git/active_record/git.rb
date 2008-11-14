@@ -76,7 +76,7 @@ module ActsLikeGit
         when Symbol
           self.send(callback)
         when Proc
-          instance_eval &callback
+          callback.call(self)
         else
           "new version of #{self.class}, id: #{self.id.to_s}" 
         end

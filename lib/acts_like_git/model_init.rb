@@ -20,7 +20,7 @@ module ActsLikeGit
       builder = Class.new(Builder)
       builder.setup(@table_name)
       
-      builder.instance_eval( &block )
+      builder.instance_eval(&block)
       
       @versioned_fields_values = {}
       @versioned_fields = builder.versioned_fields

@@ -3,7 +3,7 @@ module ActsLikeGit
     # The Builder class is the core for the versioning definition block processing.
     # There are three methods you really need to pay attention to:
     #
-    # - set_repository (aliased to location)
+    # - repository
     # - field
     # - commit
     #
@@ -18,13 +18,7 @@ module ActsLikeGit
     #     e.g. :message => lambda { "Committed by #{current_user.login}" }
     # 
     class Builder
-      class << self
-        # No idea where this is coming from - haven't found it in any ruby or
-        # rails documentation. It's not needed though, so it gets undef'd.
-        # Hopefully the list of methods that get in the way doesn't get too
-        # long.
-  #      undef_method :parent
-        
+      class << self      
         attr_accessor :repository, :versioned_fields, :commit_message
         
         # Set up all the collections. Consider this the equivalent of an
@@ -35,23 +29,12 @@ module ActsLikeGit
           @repository       = File.join( root, "git_store" )
           @versioned_fields = []
         end
-        
-        # This is how you add a field to acts_like_git.  It takes a 
-        # symbol of the field name to version.
-        #
-        # Example
-        #
-        # field :body
-        #
-        def field(*columns)
-          columns.each { |column|
-            @versioned_fields << column
-          }
-        end
-        
-        def commit(config={})
-          $stderr.puts "Commit #{config.inspect}"
-          @commit_message = config[:message]
+
+        # You can set a custom commit message.  Pass a string or a lambda.
+        # 
+        #  version.message = lambda { |u| "Committed by #{u.login}" }
+        def message=(message)
+          @commit_message = message
         end
                 
         # acts_like_git needs a repository to save the versions 
@@ -60,15 +43,16 @@ module ActsLikeGit
         #
         # Example
         #
-        # set_repository '/my/file/path'
+        # version.repository = '/my/file/path'
         # 
         # 
-        def set_repository(file_path)
+        def repository=(file_path)
           # TODO - More file checks
+          # TODO - mkdir -p
           @repository = file_path
         end
-        alias_method :set_location, :set_repository
-        alias_method :location,     :set_repository
+        alias_method :set_location, :repository=
+        alias_method :location,     :repository=
         
       end
     end

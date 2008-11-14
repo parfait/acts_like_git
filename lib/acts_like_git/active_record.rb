@@ -23,10 +23,11 @@ module ActsLikeGit
           #     field "body"
           #   end
           #
-          def versioning(&block)
+          def versioning(*fields, &block)
             return unless ActsLikeGit.versioning_enabled?
             
             self.git_settings ||= ModelInit.new(self, &block)
+            git_settings.versioned_fields = [fields].flatten
             
             unless ActsLikeGit.all_versioned_models.include?(self.name)
               ActsLikeGit.all_versioned_models << self.name

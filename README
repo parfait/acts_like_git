@@ -9,9 +9,8 @@ of using Git as version-control.
 Usage:
 
 class Post < ActiveRecord::Base
-  versioning do
-    field :title
-    set_repository '/home/git/repositories/postal.git'
+  versioning(:title) do |version|
+    version.set_repository '/home/git/repositories/postal.git'
   end
 end
 
