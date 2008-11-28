@@ -1,8 +1,8 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 require 'pp'
 
-context "A Post that versions a title and description field" do
 
+context "A Post that versions a title and description field" do
   before(:each) do
     #Grit.debug = true
     @hat = Hat.create!(:title => "Moo", :body => "RAR")
@@ -178,6 +178,20 @@ context "A Post that versions a title field" do
     end    
   end
     
+
+  describe "on creating a second model instance" do
+    it "should create a second model instance with different title field" do
+      t="Hi, I am model 2's title"
+      @post2=Post.create!(:title=>t, :body=>"Body for model 2's body")
+      @post2.title.should_not eql(@post.title)
+
+      @post2.title.should eql(@post2['title'])
+      @post.title.should eql(@post['title'])
+    end
+  end
+
+
+
   after(:each) do
     FileUtils.rm_rf('/tmp/.data')
   end

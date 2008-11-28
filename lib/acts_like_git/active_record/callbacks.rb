@@ -61,6 +61,11 @@ module ActsLikeGit
             @git ||= Grit::Repo.new(self.git_settings.repository)
           end
           
+	  def local_versioned_fields_values
+	    @local_versioned_fields_values||={}
+	  end
+
+
           private
           
           def init_git_directory

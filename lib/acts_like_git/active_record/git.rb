@@ -18,12 +18,12 @@ module ActsLikeGit
       end
       
       def write_git_method(column, value)
-        self.git_settings.versioned_fields_values[column] = value
+        self.local_versioned_fields_values[column] = value
         write_attribute column, value # Not sure if this is necessary; so we get 'changed?' field
       end
       
       def read_git_method(column)
-        if v = self.git_settings.versioned_fields_values[column]
+        if v = self.local_versioned_fields_values[column]
           return v
         end
         
@@ -67,7 +67,7 @@ module ActsLikeGit
         
         i.read_tree(last_tree) if last_tree
         
-        self.git_settings.versioned_fields_values.each do |field, value|
+        self.local_versioned_fields_values.each do |field, value|
           i.add(field_path(field), value)
         end
                 

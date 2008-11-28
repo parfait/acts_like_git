@@ -10,7 +10,8 @@ begin
   require 'active_support'
   require 'acts_like_git'
 rescue LoadError
-  puts "acts_like_git requires the mocha and test-spec gems to run it's tests"
+  puts "Error: #{$!}"
+  puts "NOTE:  acts_like_git requires the mocha and test-spec gems to run it's tests"
   exit
 end
 
