@@ -1,6 +1,6 @@
 require 'acts_like_git/active_record/callbacks'
 require 'acts_like_git/active_record/git'
-require 'acts_like_git/active_record/versioning'
+require 'acts_like_git/active_record/version_methods'
 
 module ActsLikeGit
   # Core additions to ActiveRecord models - Explore versioning for linking models
@@ -47,7 +47,7 @@ module ActsLikeGit
       
       base.send(:include, ActsLikeGit::ActiveRecord::Callbacks)
       base.send(:include, ActsLikeGit::ActiveRecord::Git)
-      base.send(:include, ActsLikeGit::ActiveRecord::Versioning)
+      base.send(:include, ActsLikeGit::ActiveRecord::VersionMethods)
     end
   end
 end
