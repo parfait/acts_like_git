@@ -3,7 +3,6 @@ module ActsLikeGit
     # This module covers the methods that allow rollback and other bits and pieces
     # 
     module VersionMethods
-      
       def showing_latest_revision?
         self.version.blank? ? true : false
       end
@@ -24,7 +23,7 @@ module ActsLikeGit
         end
         save # hm, not sure if I want to do this
       end
-
+      
       # Find the complete (textual) history for a field
       def history(field)
         commits = self.git.log('master', "#{model_folder}/#{model_id}/#{field}.txt")
@@ -42,7 +41,6 @@ module ActsLikeGit
           memo
         }
       end
-
     end
   end
 end

@@ -52,7 +52,6 @@ module ActsLikeGit
         end
         alias_method :set_location, :repository=
         alias_method :location,     :repository=
-        
       end
     end
   end

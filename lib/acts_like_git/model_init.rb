@@ -1,9 +1,8 @@
 module ActsLikeGit
-  # 
   class ModelInit
     attr_accessor :versioned_fields, :versioned_fields_values, :repository, :table_name, :commit_message
     
-    # TODO: document me
+    # TODO: document this
     #
     def initialize(model, &block)
       @repository = ""

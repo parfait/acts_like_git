@@ -3,7 +3,6 @@ module ActsLikeGit
     # This module covers the specific git interaction.
     # 
     module Git
-      
       # List all the fields that are dirty that we version
       def changed_versioned_fields
         @version
@@ -48,6 +47,7 @@ module ActsLikeGit
       end
       
     private
+      
       def init_structure
         @model_folder = self.class.to_s.tableize
         @model_id = self.id.to_s
@@ -70,7 +70,7 @@ module ActsLikeGit
         self.local_versioned_fields_values.each do |field, value|
           i.add(field_path(field), value)
         end
-                
+        
         commit_all(i, last_commit, last_tree)
       end
       

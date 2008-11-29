@@ -15,7 +15,7 @@ module ActsLikeGit
     # its classes, so this may not actually be populated with _all_ the models
     # that have versioned fields.
     # 
-    # NOTE: By default, models are not tracked. To enable the tracking, set this
+    # Note: By default, models are not tracked. To enable the tracking, set this
     #       to an array. Set it back to +nil+ to disable it again. For example:
     #       
     #         ActsLikeGit.all_versioned_models = []
@@ -28,7 +28,7 @@ module ActsLikeGit
       @@versioning_enabled =  true unless defined?(@@versioning_enabled)
       @@versioning_enabled == true
     end
-
+    
     # Enable/disable versioning - you may want to do this while migrating data.
     # 
     #   ActsLikeGit.versioning_enabled = false

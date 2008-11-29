@@ -33,7 +33,7 @@ module ActsLikeGit
       def after_commit
         # Deliberately blank.
       end
-
+      
       # Normal boolean save wrapped in a handler for the after_commit
       # callback.
       # 
@@ -42,7 +42,7 @@ module ActsLikeGit
         callback(:after_commit) if value
         return value
       end
-
+      
       # Forceful save wrapped in a handler for the after_commit callback.
       #
       def save_with_after_commit_callback!(*args)
@@ -50,7 +50,7 @@ module ActsLikeGit
         callback(:after_commit) if value
         return value
       end
-
+      
       # Normal destroy wrapped in a handler for the after_commit callback.
       #
       def destroy_with_after_commit_callback
@@ -58,18 +58,18 @@ module ActsLikeGit
         callback(:after_commit) if value
         return value
       end
-
+      
       def git
         init_git_directory
         @git ||= Grit::Repo.new(self.git_settings.repository)
       end
-
+      
       def local_versioned_fields_values
         @local_versioned_fields_values||={}
       end
-
+      
     private
-
+      
       def init_git_directory
         unless File.exists?(self.git_settings.repository)
           FileUtils.mkdir_p(self.git_settings.repository) 
