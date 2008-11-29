@@ -39,5 +39,8 @@ module ActsLikeGit
 end
 
 ActiveRecord::Base.class_eval do
-  include ActsLikeGit::ActiveRecord
+  extend  ActsLikeGit::ActiveRecord::Base
+  include ActsLikeGit::ActiveRecord::Callbacks
+  include ActsLikeGit::ActiveRecord::Git
+  include ActsLikeGit::ActiveRecord::VersionMethods
 end
