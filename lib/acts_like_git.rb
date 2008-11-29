@@ -3,7 +3,6 @@ require 'fileutils'
 require 'activerecord'
 
 require 'acts_like_git/active_record'
-require 'acts_like_git/rails_additions'
 require 'acts_like_git/model_init'
 
 ActiveRecord::Base.send(:include, ActsLikeGit::ActiveRecord)
