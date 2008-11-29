@@ -1,10 +1,9 @@
 module ActsLikeGit
   module Version #:nodoc:
-    Major = 0
-    Minor = 0
-    Tiny  = 1
-    
-    String = [Major, Minor, Tiny].join('.')
+    MAJOR   = 0
+    MINOR   = 0
+    TINY    = 1
+    STRING  = [MAJOR, MINOR, TINY].join('.')
   end
   
   # A ConnectionError will get thrown when a connection to git can't be
