@@ -1,12 +1,3 @@
-require 'grit'
-require 'fileutils'
-require 'activerecord'
-
-require 'acts_like_git/active_record'
-require 'acts_like_git/model_init'
-
-ActiveRecord::Base.send(:include, ActsLikeGit::ActiveRecord)
-
 module ActsLikeGit
   module Version #:nodoc:
     Major = 0
@@ -42,4 +33,11 @@ module ActsLikeGit
   def self.versioning_enabled=(value)
     @@versioning_enabled = value
   end
+  
+  autoload :ActiveRecord, 'acts_like_git/active_record'
+  autoload :ModelInit,    'acts_like_git/model_init'
+end
+
+ActiveRecord::Base.class_eval do
+  include ActsLikeGit::ActiveRecord
 end

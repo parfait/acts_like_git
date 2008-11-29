@@ -1,7 +1,3 @@
-require 'acts_like_git/active_record/callbacks'
-require 'acts_like_git/active_record/git'
-require 'acts_like_git/active_record/version_methods'
-
 module ActsLikeGit
   # Core additions to ActiveRecord models - Explore versioning for linking models
   # to a git repository.
@@ -43,11 +39,15 @@ module ActsLikeGit
             after_destroy :git_delete
           end
         end
+        
+        include Callbacks
+        include Git
+        include VersionMethods
       end
-      
-      base.send(:include, ActsLikeGit::ActiveRecord::Callbacks)
-      base.send(:include, ActsLikeGit::ActiveRecord::Git)
-      base.send(:include, ActsLikeGit::ActiveRecord::VersionMethods)
     end
+    
+    autoload :Callbacks,       'acts_like_git/active_record/callbacks'
+    autoload :Git,             'acts_like_git/active_record/git'
+    autoload :VersionMethods,  'acts_like_git/active_record/version_methods'
   end
 end

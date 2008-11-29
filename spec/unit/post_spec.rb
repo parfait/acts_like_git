@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), '..', 'spec_helper')
+require File.dirname(__FILE__) + '/../spec_helper'
 
 context "A Post that versions a title and description field" do
   before(:each) do

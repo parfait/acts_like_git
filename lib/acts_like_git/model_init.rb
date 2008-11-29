@@ -1,5 +1,3 @@
-require 'acts_like_git/model_init/builder'
-
 module ActsLikeGit
   # 
   class ModelInit
@@ -27,5 +25,7 @@ module ActsLikeGit
       @commit_message = builder.commit_message
       @repository = builder.repository
     end
+    
+    autoload :Builder, 'acts_like_git/model_init/builder'
   end
 end

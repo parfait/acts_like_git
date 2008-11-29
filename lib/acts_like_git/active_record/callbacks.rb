@@ -1,3 +1,6 @@
+require 'grit'
+require 'fileutils'
+
 module ActsLikeGit
   module ActiveRecord
     # This module contains all the methods to navigate your versions.
