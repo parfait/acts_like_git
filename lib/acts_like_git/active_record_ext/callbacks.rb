@@ -2,7 +2,7 @@ require 'grit'
 require 'fileutils'
 
 module ActsLikeGit
-  module ActiveRecord
+  module ActiveRecordExt
     # This module contains all the methods to navigate your versions.
     # 
     module Callbacks

@@ -1,5 +1,5 @@
 module ActsLikeGit
-  module ActiveRecord
+  module ActiveRecordExt
     # This module covers the methods that allow rollback and other bits and pieces
     # 
     module VersionMethods

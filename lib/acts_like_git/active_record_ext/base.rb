@@ -1,5 +1,5 @@
 module ActsLikeGit
-  module ActiveRecord
+  module ActiveRecordExt
     module Base
       def self.extended(target)
         target.class_eval do

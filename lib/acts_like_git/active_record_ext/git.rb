@@ -1,5 +1,5 @@
 module ActsLikeGit
-  module ActiveRecord
+  module ActiveRecordExt
     # This module covers the specific git interaction.
     # 
     module Git

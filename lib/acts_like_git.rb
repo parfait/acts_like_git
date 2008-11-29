@@ -34,13 +34,13 @@ module ActsLikeGit
     @@versioning_enabled = value
   end
   
-  autoload :ActiveRecord, 'acts_like_git/active_record'
-  autoload :ModelInit,    'acts_like_git/model_init'
+  autoload :ActiveRecordExt,  'acts_like_git/active_record_ext'
+  autoload :ModelInit,        'acts_like_git/model_init'
 end
 
 ActiveRecord::Base.class_eval do
-  extend  ActsLikeGit::ActiveRecord::Base
-  include ActsLikeGit::ActiveRecord::Callbacks
-  include ActsLikeGit::ActiveRecord::Git
-  include ActsLikeGit::ActiveRecord::VersionMethods
+  extend  ActsLikeGit::ActiveRecordExt::Base
+  include ActsLikeGit::ActiveRecordExt::Callbacks
+  include ActsLikeGit::ActiveRecordExt::Git
+  include ActsLikeGit::ActiveRecordExt::VersionMethods
 end
