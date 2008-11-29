@@ -7,7 +7,6 @@ class ActsLikeGitGenerator < Rails::Generator::NamedBase
       }
     end
   end
-end
 
 private  
 
@@ -24,3 +23,4 @@ private
       assigns[:attributes] = [Rails::Generator::GeneratedAttribute.new("current_version", "string")]
     end
   end
+end
