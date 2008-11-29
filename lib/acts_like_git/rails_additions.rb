@@ -16,15 +16,3 @@ end
 Hash.send(
   :include, ActsLikeGit::HashExcept
 ) unless Hash.instance_methods.include?("except")
-
-module ActsLikeGit
-  module ArrayExtractOptions
-    def extract_options!
-      last.is_a?(::Hash) ? pop : {}
-    end
-  end
-end
-
-Array.send(
-  :include, ActsLikeGit::ArrayExtractOptions
-) unless Array.instance_methods.include?("extract_options!")
