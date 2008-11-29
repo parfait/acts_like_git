@@ -15,10 +15,10 @@ module ActsLikeGit
     # its classes, so this may not actually be populated with _all_ the models
     # that have versioned fields.
     # 
-    # Note: By default, models are not tracked. To enable the tracking, set this
-    #       to an array. Set it back to +nil+ to disable it again. For example:
-    #       
-    #         ActsLikeGit.all_versioned_models = []
+    # Note::  By default, models are not tracked. To enable the tracking, set this
+    #         to an array. Set it back to +nil+ to disable it again. For example:
+    #         
+    #           ActsLikeGit.all_versioned_models = []
     #
     attr_accessor :all_versioned_models
     
