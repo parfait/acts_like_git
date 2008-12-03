@@ -7,6 +7,7 @@ task :default => :spec
 
 desc "Run the specs under spec"
 Spec::Rake::SpecTask.new(:spec) do |t|
+  t.spec_opts = ["--format", "progress", "--color"]
   t.spec_files = FileList['spec/**/*_spec.rb']
 end
 

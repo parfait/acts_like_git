@@ -22,6 +22,12 @@ ActiveRecord::Base.silence do
         t.string  :version
         t.timestamps
       end
+
+      m.create_table 'reviews' do |t|
+        t.text    :content
+        t.integer :user_id
+        t.timestamps
+      end
     end
   end
 end

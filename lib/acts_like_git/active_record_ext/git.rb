@@ -17,7 +17,7 @@ module ActsLikeGit
       end
       
       def write_git_method(column, value)
-        self.local_versioned_fields_values[column] = value
+        self.local_versioned_fields_values[column] = value.to_s
         write_attribute column, value # Not sure if this is necessary; so we get 'changed?' field
       end
       
