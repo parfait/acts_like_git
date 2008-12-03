@@ -1,6 +1,11 @@
 RAILS_ROOT = File.dirname(__FILE__)
 
+class User < ActiveRecord::Base
+end
+
 class Review < ActiveRecord::Base
+  belongs_to :user
+
   versioning(:content, :user_id) { |version|
     version.repository = '/tmp/.data/git_store.git'
   }

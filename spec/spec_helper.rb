@@ -28,6 +28,10 @@ ActiveRecord::Base.silence do
         t.integer :user_id
         t.timestamps
       end
+
+      m.create_table 'users' do |t|
+        t.string :name
+      end
     end
   end
 end
