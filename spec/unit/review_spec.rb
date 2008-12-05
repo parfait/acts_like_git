@@ -24,8 +24,19 @@ context "A Review that versions a integer field along with a string" do
   end
 
   it_should_behave_like "it keeps history"
+
+	it "should allow for modifications and versioning" do
+		@review.user_id = 13
+		@review.content = "More Stuff"
+		@review.save
+
+		@review.log.size.should == 2
+		@review.history(:content).size.should == 2
+		@review.history(:user_id).size.should == 2
+	end
 end
 
+#TODO: Get this working as well.
 #context "A Review with associated User model gets versioned" do
 #  before(:each) do
 #    @user = User.create!(:name => "Nick")

@@ -1,4 +1,7 @@
 RAILS_ROOT = File.dirname(__FILE__)
+GIT_STORE = '/tmp/.data/git_store.git' 
+
+FileUtils.rm_rf GIT_STORE
 
 class User < ActiveRecord::Base
 end
@@ -7,20 +10,20 @@ class Review < ActiveRecord::Base
   belongs_to :user
 
   versioning(:content, :user_id) { |version|
-    version.repository = '/tmp/.data/git_store.git'
+    version.repository = GIT_STORE
   }
 end
 
 class Post < ActiveRecord::Base
   versioning(:title) { |version|
-    version.repository = '/tmp/.data/git_store.git'
+    version.repository = GIT_STORE
   }
 end
 
 class Hat < ActiveRecord::Base
   set_table_name 'posts'
   versioning(:title, :body) do |version|
-    version.repository = '/tmp/.data/git_store.git'
+    version.repository = GIT_STORE
   end
 end
 

@@ -2,7 +2,6 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 context "A Post that versions a title and description field" do
   before(:each) do
-    #Grit.debug = true
     @hat = Hat.create!(:title => "Moo", :body => "RAR")
     @repo_dir = File.join('/', 'tmp', '.data', 'git_store.git')
   end

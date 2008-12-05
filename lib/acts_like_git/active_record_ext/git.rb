@@ -51,7 +51,7 @@ module ActsLikeGit
       def init_structure
         @model_folder = self.class.to_s.tableize
         @model_id = self.id.to_s
-        @user = Grit::Actor.new("ActsAsGit", 'aag@email.com')
+        @model_user = Grit::Actor.new("ActsAsGit", 'aag@email.com')
       end
       
       def add_all_changes_to_git
@@ -87,7 +87,7 @@ module ActsLikeGit
           "new version of #{self.class}, id: #{self.id.to_s}" 
         end
         lc = (last_commit ? [last_commit.id] : nil)
-        index.commit(message, lc, @user)
+        index.commit(message, lc, @model_user)
       end
       
       def field_path(field)
