@@ -26,11 +26,11 @@ context "A Review that versions a integer field along with a string" do
   it_should_behave_like "it keeps history"
 end
 
-context "A Review with associated User model gets versioned" do
-  before(:each) do
-    @user = User.create!(:name => "Nick")
-    @review = Review.create!(:content => "Stuff", :user => @user)
-  end
-
-  it_should_behave_like "it keeps history"
-end
+#context "A Review with associated User model gets versioned" do
+#  before(:each) do
+#    @user = User.create!(:name => "Nick")
+#    @review = Review.create!(:content => "Stuff", :user => @user)
+#  end
+#
+#  it_should_behave_like "it keeps history"
+#end

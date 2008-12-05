@@ -14,8 +14,16 @@ end
 desc "Generate RCov reports"
 Spec::Rake::SpecTask.new(:rcov) do |t|
   t.libs << 'lib'
-#t.spec_files = FileList['spec/**/*_spec.rb']
-  t.spec_files = FileList['spec/review_spec.rb']
+  t.spec_files = FileList['spec/**/*_spec.rb']
   t.rcov = true
   t.rcov_opts = ['--exclude', 'spec', '--exclude', 'gems', '--exclude', 'riddle']
+end
+
+desc "Repeat the tests many times to find failures."
+task :repeat do
+  100.times do
+    output = `rake spec --trace`
+    puts output
+    break unless output =~ /0 fail/
+  end
 end
