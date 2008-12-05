@@ -19,6 +19,12 @@ Spec::Rake::SpecTask.new(:rcov) do |t|
   t.rcov_opts = ['--exclude', 'spec', '--exclude', 'gems', '--exclude', 'riddle']
 end
 
+desc "One file, one line, one spec."
+Spec::Rake::SpecTask.new(:target) do |t|
+  t.spec_opts = ["--format", "progress", "--color", "-l", ENV['line']]
+  t.spec_files = FileList["spec/unit/#{ENV['unit']}_spec.rb"]
+end
+
 desc "Repeat the tests many times to find failures."
 task :repeat do
   100.times do
