@@ -175,7 +175,6 @@ context "A Post that versions a title field" do
     end    
   end
     
-
   describe "on creating a second model instance" do
     it "should create a second model instance with different title field" do
       t="Hi, I am model 2's title"
@@ -187,10 +186,20 @@ context "A Post that versions a title field" do
     end
   end
 
+	describe "on destroy" do
+		it "should destroy model successfully" do
+			@post.versions.should_not be_empty
+			@post.destroy
 
+			@post.history(:title).should be_empty
+			@post.history_hash(:title).should be_empty
+			@post.versions.last.message.should == "Removing files for #{@post.class}, id: #{@post.id}"
+			@post.versions.last.tree.contents.should be_empty
+		end
+
+	end
 
   after(:each) do
-    FileUtils.rm_rf('/tmp/.data')
+   	FileUtils.rm_rf('/tmp/.data')
   end
-    
 end

@@ -15,6 +15,14 @@ module ActsLikeGit
         init_structure
         add_all_changes_to_git
       end
+
+			def git_delete
+				self.local_versioned_fields_values.each do |field, value|
+					self.git.remove(field_path(field))
+				end
+				
+				self.git.commit_index("Removing files for #{self.class}, id: #{self.id}")
+			end
       
       def write_git_method(column, value)
         self.local_versioned_fields_values[column] = value.to_s

@@ -26,6 +26,8 @@ module ActsLikeGit
       
       # Find the complete (textual) history for a field
       def history(field)
+				return [] if self.frozen? 
+
         commits = self.git.log('master', "#{model_folder}/#{model_id}/#{field}.txt")
         commits.collect {|c| (c.tree/model_folder/model_id/"#{field}.txt").data }
       end
@@ -33,6 +35,8 @@ module ActsLikeGit
       # Convenience method to give you an array of hashes
       # { :id => 'aee1be..', :data => 'monkey' }
       def history_hash(field)
+				return {} if self.frozen? 
+
         commits = self.git.log('master', "#{model_folder}/#{model_id}/#{field}.txt")
         commits.inject([]) { |memo,iter|
           # You can get all sorts of information, like 'blame'
