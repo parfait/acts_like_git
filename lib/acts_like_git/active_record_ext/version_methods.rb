@@ -14,15 +14,19 @@ module ActsLikeGit
       
       # Revert the database version to the git commit version
       def revert_to(version_hash)
-        tree = self.git.tree(version_hash)
-        dir = tree.contents[0] # posts/
-        data = dir.contents[0] # 6/
-        data.contents.each do |f| # title.txt
-          field = f.name.gsub(".txt","")
-          send("#{field.to_sym}=", f.data)
+				git_contents(version_hash).each do |blob|
+					field = deblobify(blob)
+          send("#{field.to_sym}=", blob.data)
         end
         save # hm, not sure if I want to do this
       end
+
+			# Get the data associated with this field for one commit.
+			def version(field, version_hash)
+				git_contents(version_hash).each do |blob|
+					return blob.data if deblobify(blob) == field.to_s	
+        end
+			end
       
       # Find the complete (textual) history for a field
       def history(field)
@@ -45,6 +49,17 @@ module ActsLikeGit
           memo
         }
       end
+
+			protected
+				# Removing .txt in one place from the blob. Should have a blobify too.
+				def deblobify(blob)
+					blob.name.gsub(".txt", "")
+				end
+
+				# Traversing through the commit subdirs... posts/6/title
+				def git_contents(version_hash)
+					self.git.tree(version_hash).contents[0].contents[0].contents
+				end
     end
   end
 end
