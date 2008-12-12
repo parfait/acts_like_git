@@ -22,7 +22,7 @@ module ActsLikeGit
       end
 
       # Get the data associated with this field for one commit.
-      def version(field, version_hash)
+      def get_version(field, version_hash)
         git_contents(version_hash).each do |blob|
           return blob.data if deblobify(blob) == field.to_s  
         end

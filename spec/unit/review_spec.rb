@@ -34,23 +34,23 @@ context "A Review that versions a integer field along with a string" do
   end
 
   it "should get history for specific version" do
-    @review.version(:content, @review.log.first).should == "Stuff"
-    @review.version(:user_id, @review.log.first).should == "1"
+    @review.get_version(:content, @review.log.first).should == "Stuff"
+    @review.get_version(:user_id, @review.log.first).should == "1"
 
     new_version(@review)
 
-    @review.version(:content, @review.log.last).should == "Stuff"
-    @review.version(:user_id, @review.log.last).should == "1"
+    @review.get_version(:content, @review.log.last).should == "Stuff"
+    @review.get_version(:user_id, @review.log.last).should == "1"
 
-    @review.version(:content, @review.log.first).should == "More Stuff"
-    @review.version(:user_id, @review.log.first).should == "13"
+    @review.get_version(:content, @review.log.first).should == "More Stuff"
+    @review.get_version(:user_id, @review.log.first).should == "13"
   end
 
   it "should pull out the proper ID from the commits" do
     other_review = Review.create!(:content => "Other Stuff", :user_id => 2)
 
-    @review.version(:content, @review.log.first).should == "Stuff"
-    other_review.version(:content, other_review.log.first).should == "Other Stuff"
+    @review.get_version(:content, @review.log.first).should == "Stuff"
+    other_review.get_version(:content, other_review.log.first).should == "Other Stuff"
   end
 
   after(:each) do
