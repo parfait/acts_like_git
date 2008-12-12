@@ -58,7 +58,9 @@ module ActsLikeGit
 
         # Traversing through the commit subdirs... posts/6/title
         def git_contents(version_hash)
-          self.git.tree(version_hash).contents[0].contents[0].contents
+          self.git.commit(version_hash).tree.contents.first.contents.each do |tree|
+            return tree.contents if tree.name == self.id.to_s
+          end
         end
     end
   end

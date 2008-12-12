@@ -46,6 +46,13 @@ context "A Review that versions a integer field along with a string" do
     @review.version(:user_id, @review.log.first).should == "13"
   end
 
+  it "should pull out the proper ID from the commits" do
+    other_review = Review.create!(:content => "Other Stuff", :user_id => 2)
+
+    @review.version(:content, @review.log.first).should == "Stuff"
+    other_review.version(:content, other_review.log.first).should == "Other Stuff"
+  end
+
   after(:each) do
     FileUtils.rm_rf('/tmp/.data')
   end
