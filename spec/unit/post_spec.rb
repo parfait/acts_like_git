@@ -186,20 +186,20 @@ context "A Post that versions a title field" do
     end
   end
 
-	describe "on destroy" do
-		it "should destroy model successfully" do
-			@post.versions.should_not be_empty
-			@post.destroy
+  describe "on destroy" do
+    it "should destroy model successfully" do
+      @post.versions.should_not be_empty
+      @post.destroy
 
-			@post.history(:title).should be_empty
-			@post.history_hash(:title).should be_empty
-			@post.versions.last.message.should == "Removing files for #{@post.class}, id: #{@post.id}"
-			@post.versions.last.tree.contents.should be_empty
-		end
+      @post.history(:title).should be_empty
+      @post.history_hash(:title).should be_empty
+      @post.versions.last.message.should == "Removing files for #{@post.class}, id: #{@post.id}"
+      @post.versions.last.tree.contents.should be_empty
+    end
 
-	end
+  end
 
   after(:each) do
-   	FileUtils.rm_rf('/tmp/.data')
+    FileUtils.rm_rf('/tmp/.data')
   end
 end

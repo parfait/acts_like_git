@@ -40,5 +40,5 @@ require 'acts_like_git'
 require File.dirname(__FILE__) + '/fixtures/models'
 
 if ENV['debug'] == 'true'
-	Grit.debug = true
+  Grit.debug = true
 end

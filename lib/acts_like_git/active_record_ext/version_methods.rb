@@ -14,23 +14,23 @@ module ActsLikeGit
       
       # Revert the database version to the git commit version
       def revert_to(version_hash)
-				git_contents(version_hash).each do |blob|
-					field = deblobify(blob)
+        git_contents(version_hash).each do |blob|
+          field = deblobify(blob)
           send("#{field.to_sym}=", blob.data)
         end
         save # hm, not sure if I want to do this
       end
 
-			# Get the data associated with this field for one commit.
-			def version(field, version_hash)
-				git_contents(version_hash).each do |blob|
-					return blob.data if deblobify(blob) == field.to_s	
+      # Get the data associated with this field for one commit.
+      def version(field, version_hash)
+        git_contents(version_hash).each do |blob|
+          return blob.data if deblobify(blob) == field.to_s  
         end
-			end
+      end
       
       # Find the complete (textual) history for a field
       def history(field)
-				return [] if self.frozen? 
+        return [] if self.frozen? 
 
         commits = self.git.log('master', "#{model_folder}/#{model_id}/#{field}.txt")
         commits.collect {|c| (c.tree/model_folder/model_id/"#{field}.txt").data }
@@ -39,7 +39,7 @@ module ActsLikeGit
       # Convenience method to give you an array of hashes
       # { :id => 'aee1be..', :data => 'monkey' }
       def history_hash(field)
-				return {} if self.frozen? 
+        return {} if self.frozen? 
 
         commits = self.git.log('master', "#{model_folder}/#{model_id}/#{field}.txt")
         commits.inject([]) { |memo,iter|
@@ -50,16 +50,16 @@ module ActsLikeGit
         }
       end
 
-			protected
-				# Removing .txt in one place from the blob. Should have a blobify too.
-				def deblobify(blob)
-					blob.name.gsub(".txt", "")
-				end
+      protected
+        # Removing .txt in one place from the blob. Should have a blobify too.
+        def deblobify(blob)
+          blob.name.gsub(".txt", "")
+        end
 
-				# Traversing through the commit subdirs... posts/6/title
-				def git_contents(version_hash)
-					self.git.tree(version_hash).contents[0].contents[0].contents
-				end
+        # Traversing through the commit subdirs... posts/6/title
+        def git_contents(version_hash)
+          self.git.tree(version_hash).contents[0].contents[0].contents
+        end
     end
   end
 end
