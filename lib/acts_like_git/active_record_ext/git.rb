@@ -13,7 +13,14 @@ module ActsLikeGit
       # Add all the changes to this model to git
       def git_commit
         init_structure
-        add_all_changes_to_git
+        sha = add_all_changes_to_git
+        
+        if self.attributes.has_key?("version") 
+          self.version = sha
+          self.connection.update("UPDATE #{self.class.table_name} SET version='#{sha}' WHERE id='#{self.id}'")
+        end
+        
+        return sha
       end
 
       def git_delete

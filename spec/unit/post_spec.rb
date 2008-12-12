@@ -77,7 +77,11 @@ context "A Post that versions a title field" do
       @post.title = 'Moo2'
       @post.title.should == 'Moo2'
     end
-    
+      
+    it "should save current sha1 to version field" do
+      @post.version.should == @post.log.first
+      Post.find(@post.id).version.should == @post.log.first
+    end
   end
   
   describe "reverting" do
