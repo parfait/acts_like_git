@@ -2,6 +2,8 @@
 
 ALG automagically saves the history of a given text or string field. It sits over the top of an ActiveRecord model; after a value is committed to the database, the plugin writes the new value to a text file and commits it to a git repository. This way you get all the advantages of using Git as version-control.
 
+Note: this plugin does not play nice with other plugins which override the getters and setters on your model. So if, for example, you're creating a permalink on the same column as the versioning, you're going to run into problems due to the inherent complexity in define_attribute_methods.
+
 == Usage
 
 Declare which attributes are to be versioned:

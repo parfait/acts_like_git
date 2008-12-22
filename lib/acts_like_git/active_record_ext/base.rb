@@ -24,6 +24,9 @@ module ActsLikeGit
         
         self.git_settings ||= ModelInit.new(self, &block)
         git_settings.versioned_fields = [fields].flatten
+
+        # Make sure we load all the methods, as well as any permalink-fu overriding of methods.
+        define_attribute_methods
         
         self.git_settings.versioned_fields.each do |column|
           git_read_method = "def #{column}; read_git_method('#{column}'); end"          
