@@ -20,10 +20,7 @@ module ActsLikeGit
       def versioning(*fields, &block)
         return unless ActsLikeGit.versioning_enabled?
         
-        include ActsLikeGit::ActiveRecordExt::Callbacks
-        include ActsLikeGit::ActiveRecordExt::Git
-        include ActsLikeGit::ActiveRecordExt::VersionMethods
-        
+        include Callbacks, Git, VersionMethods
         ActsLikeGit.all_versioned_models |= [self.name] if ActsLikeGit.all_versioned_models
         
         self.git_settings ||= ModelInit.new(self, &block)
