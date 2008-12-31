@@ -1,11 +1,8 @@
-require 'acts_like_git/model_init/builder'
-
 module ActsLikeGit
-  # 
   class ModelInit
     attr_accessor :versioned_fields, :versioned_fields_values, :repository, :table_name, :commit_message
     
-    # TODO: document me
+    # TODO: document this
     #
     def initialize(model, &block)
       @repository = ""
@@ -27,5 +24,7 @@ module ActsLikeGit
       @commit_message = builder.commit_message
       @repository = builder.repository
     end
+    
+    autoload :Builder, 'acts_like_git/model_init/builder'
   end
 end

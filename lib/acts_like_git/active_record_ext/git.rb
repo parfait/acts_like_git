@@ -1,9 +1,8 @@
 module ActsLikeGit
-  module ActiveRecord
+  module ActiveRecordExt
     # This module covers the specific git interaction.
     # 
     module Git
-      
       # List all the fields that are dirty that we version
       def changed_versioned_fields
         @version
@@ -14,16 +13,31 @@ module ActsLikeGit
       # Add all the changes to this model to git
       def git_commit
         init_structure
-        add_all_changes_to_git
+        sha = add_all_changes_to_git
+        
+        if self.attributes.has_key?("version") 
+          self.version = sha
+          self.connection.update("UPDATE #{self.class.table_name} SET version='#{sha}' WHERE id='#{self.id}'")
+        end
+        
+        return sha
+      end
+
+      def git_delete
+        self.local_versioned_fields_values.each do |field, value|
+          self.git.remove(field_path(field))
+        end
+        
+        self.git.commit_index("Removing files for #{self.class}, id: #{self.id}")
       end
       
       def write_git_method(column, value)
-        self.git_settings.versioned_fields_values[column] = value
+        self.local_versioned_fields_values[column] = value.to_s
         write_attribute column, value # Not sure if this is necessary; so we get 'changed?' field
       end
       
       def read_git_method(column)
-        if v = self.git_settings.versioned_fields_values[column]
+        if v = self.local_versioned_fields_values[column]
           return v
         end
         
@@ -48,10 +62,11 @@ module ActsLikeGit
       end
       
     private
+      
       def init_structure
         @model_folder = self.class.to_s.tableize
         @model_id = self.id.to_s
-        @user = Grit::Actor.new("ActsAsGit", 'aag@email.com')
+        @model_user = Grit::Actor.new("ActsAsGit", 'aag@email.com')
       end
       
       def add_all_changes_to_git
@@ -67,10 +82,10 @@ module ActsLikeGit
         
         i.read_tree(last_tree) if last_tree
         
-        self.git_settings.versioned_fields_values.each do |field, value|
+        self.local_versioned_fields_values.each do |field, value|
           i.add(field_path(field), value)
         end
-                
+        
         commit_all(i, last_commit, last_tree)
       end
       
@@ -87,7 +102,7 @@ module ActsLikeGit
           "new version of #{self.class}, id: #{self.id.to_s}" 
         end
         lc = (last_commit ? [last_commit.id] : nil)
-        index.commit(message, lc, @user)
+        index.commit(message, lc, @model_user)
       end
       
       def field_path(field)

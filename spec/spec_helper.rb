@@ -1,29 +1,15 @@
-ENV["RAILS_ENV"] = "test"
 $:.unshift File.dirname(__FILE__) + '/../lib'
+require 'rubygems'
 
-begin
-  require 'rubygems'
-  require 'spec'
-  require 'yaml'
-  require 'mocha'
-  require 'active_record'
-  require 'active_support'
-  require 'acts_like_git'
-rescue LoadError
-  puts "acts_like_git requires the mocha and test-spec gems to run it's tests"
-  exit
-end
-
-require 'rake/rdoctask'
-require 'spec/rake/spectask'
-require 'rake/gempackagetask'
-
+require 'spec'
+require 'mocha'
+module Test; module Unit; def self.run?; true end; end; end
 Spec::Runner.configure do |config|
   config.mock_with :mocha
 end
 
+require 'active_record'
 ActiveRecord::Base.logger = Logger.new(STDOUT) if 'irb' == $0
-
 ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :dbfile => ':memory:')
 ActiveRecord::Migration.verbose = false
 
@@ -36,8 +22,23 @@ ActiveRecord::Base.silence do
         t.string  :version
         t.timestamps
       end
+
+      m.create_table 'reviews' do |t|
+        t.text    :content
+        t.integer :user_id
+        t.timestamps
+      end
+
+      m.create_table 'users' do |t|
+        t.string :name
+      end
     end
   end
 end
 
-require File.join(File.dirname(__FILE__), '/fixtures/models')
+require 'acts_like_git'
+require File.dirname(__FILE__) + '/fixtures/models'
+
+if ENV['debug'] == 'true'
+  Grit.debug = true
+end

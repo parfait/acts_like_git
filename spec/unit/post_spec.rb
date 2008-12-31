@@ -1,10 +1,7 @@
-require File.join(File.dirname(__FILE__), '..', 'spec_helper')
-require 'pp'
+require File.dirname(__FILE__) + '/../spec_helper'
 
 context "A Post that versions a title and description field" do
-
   before(:each) do
-    #Grit.debug = true
     @hat = Hat.create!(:title => "Moo", :body => "RAR")
     @repo_dir = File.join('/', 'tmp', '.data', 'git_store.git')
   end
@@ -80,7 +77,11 @@ context "A Post that versions a title field" do
       @post.title = 'Moo2'
       @post.title.should == 'Moo2'
     end
-    
+      
+    it "should save current sha1 to version field" do
+      @post.version.should == @post.log.first
+      Post.find(@post.id).version.should == @post.log.first
+    end
   end
   
   describe "reverting" do
@@ -178,8 +179,31 @@ context "A Post that versions a title field" do
     end    
   end
     
+  describe "on creating a second model instance" do
+    it "should create a second model instance with different title field" do
+      t="Hi, I am model 2's title"
+      @post2=Post.create!(:title=>t, :body=>"Body for model 2's body")
+      @post2.title.should_not eql(@post.title)
+
+      @post2.title.should eql(@post2['title'])
+      @post.title.should eql(@post['title'])
+    end
+  end
+
+  describe "on destroy" do
+    it "should destroy model successfully" do
+      @post.versions.should_not be_empty
+      @post.destroy
+
+      @post.history(:title).should be_empty
+      @post.history_hash(:title).should be_empty
+      @post.versions.last.message.should == "Removing files for #{@post.class}, id: #{@post.id}"
+      @post.versions.last.tree.contents.should be_empty
+    end
+
+  end
+
   after(:each) do
     FileUtils.rm_rf('/tmp/.data')
   end
-    
 end
